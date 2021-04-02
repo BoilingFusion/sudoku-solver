@@ -1,40 +1,36 @@
 #include <iostream>
 #include <bitset>
-#include <cmath>
+#include "sudoku.h"
 
 template <int N>
-class Sudoku
+Sudoku<N>::Sudoku(std::bitset<N * N> initial)
 {
-private:
-    std::bitset<N * N> values[N * N * N * N];
-
-public:
-    Sudoku(std::bitset<N * N> initial)
+    for (int i = 0; i != N * N * N * N; i++)
     {
-        for (int i = 0; i != N * N * N * N; i++)
-        {
-            values[i] = initial;
-        }
+        values[i] = initial;
     }
+}
 
-    Sudoku()
+template <int N>
+Sudoku<N>::Sudoku()
+{
+    for (int i = 0; i != N * N * N * N; i++)
     {
-        for (int i = 0; i != N * N * N * N; i++)
-        {
-            values[i].set();
-        }
+        values[i].set();
     }
+}
 
-    std::bitset<N * N> &operator[](int index)
-    {
-        return values[index];
-    }
+template <int N>
+std::bitset<N * N> &Sudoku<N>::operator[](int index)
+{
+    return values[index];
+}
 
-    std::bitset<N * N> operator[](int index) const
-    {
-        return values[index];
-    }
-};
+template <int N>
+std::bitset<N * N> Sudoku<N>::operator[](int index) const
+{
+    return values[index];
+}
 
 template <int S>
 bool determined(const std::bitset<S> &square)
@@ -163,7 +159,7 @@ bool apply_sudoku(Sudoku<N> &sudoku)
 }
 
 template <int N>
-bool solve_sudoku(Sudoku<N> sudoku, Sudoku<N> *out_sudoku = std::nullptr_t())
+bool solve_sudoku(Sudoku<N> sudoku, Sudoku<N> *out_sudoku)
 {
     bool solved = true;
     while (apply_sudoku<N>(sudoku))
@@ -213,277 +209,4 @@ bool solve_sudoku(Sudoku<N> sudoku, Sudoku<N> *out_sudoku = std::nullptr_t())
         }
     }
     return false;
-}
-
-template <int N>
-void print_sudoku(Sudoku<N> sudoku)
-{
-    for (int y = 0; y != N * N; y++)
-    {
-        for (int x = 0; x != N * N; x++)
-        {
-            std::cout << sudoku[y * N * N + x] << "|";
-        }
-        std::cout << std::endl;
-    }
-    for (int i = 0; i != N * N * N * N + N * N; i++)
-    {
-        std::cout << "-";
-    }
-    std::cout << std::endl;
-}
-
-template <int S>
-void nice_print_square(std::bitset<S> square);
-
-template <>
-void nice_print_square<9>(std::bitset<9> square)
-{
-    if (square == std::bitset<9>(1))
-        std::cout << "1";
-    else if (square == std::bitset<9>(2))
-        std::cout << "2";
-    else if (square == std::bitset<9>(4))
-        std::cout << "3";
-    else if (square == std::bitset<9>(8))
-        std::cout << "4";
-    else if (square == std::bitset<9>(16))
-        std::cout << "5";
-    else if (square == std::bitset<9>(32))
-        std::cout << "6";
-    else if (square == std::bitset<9>(64))
-        std::cout << "7";
-    else if (square == std::bitset<9>(128))
-        std::cout << "8";
-    else if (square == std::bitset<9>(256))
-        std::cout << "9";
-    else
-        std::cout << " ";
-}
-
-template <>
-void nice_print_square<16>(std::bitset<16> square)
-{
-    if (square == std::bitset<16>(1))
-        std::cout << " 1";
-    else if (square == std::bitset<16>(2))
-        std::cout << " 2";
-    else if (square == std::bitset<16>(4))
-        std::cout << " 3";
-    else if (square == std::bitset<16>(8))
-        std::cout << " 4";
-    else if (square == std::bitset<16>(16))
-        std::cout << " 5";
-    else if (square == std::bitset<16>(32))
-        std::cout << " 6";
-    else if (square == std::bitset<16>(64))
-        std::cout << " 7";
-    else if (square == std::bitset<16>(128))
-        std::cout << " 8";
-    else if (square == std::bitset<16>(256))
-        std::cout << " 9";
-    else if (square == std::bitset<16>(512))
-        std::cout << "10";
-    else if (square == std::bitset<16>(1024))
-        std::cout << "11";
-    else if (square == std::bitset<16>(2048))
-        std::cout << "12";
-    else if (square == std::bitset<16>(4096))
-        std::cout << "13";
-    else if (square == std::bitset<16>(8192))
-        std::cout << "14";
-    else if (square == std::bitset<16>(16384))
-        std::cout << "15";
-    else if (square == std::bitset<16>(32768))
-        std::cout << "16";
-    else
-        std::cout << "  ";
-}
-
-template <>
-void nice_print_square<25>(std::bitset<25> square)
-{
-    if (square == std::bitset<25>(1))
-        std::cout << " 1";
-    else if (square == std::bitset<25>(2))
-        std::cout << " 2";
-    else if (square == std::bitset<25>(4))
-        std::cout << " 3";
-    else if (square == std::bitset<25>(8))
-        std::cout << " 4";
-    else if (square == std::bitset<25>(16))
-        std::cout << " 5";
-    else if (square == std::bitset<25>(32))
-        std::cout << " 6";
-    else if (square == std::bitset<25>(64))
-        std::cout << " 7";
-    else if (square == std::bitset<25>(128))
-        std::cout << " 8";
-    else if (square == std::bitset<25>(256))
-        std::cout << " 9";
-    else if (square == std::bitset<25>(512))
-        std::cout << "10";
-    else if (square == std::bitset<25>(1024))
-        std::cout << "11";
-    else if (square == std::bitset<25>(2048))
-        std::cout << "12";
-    else if (square == std::bitset<25>(4096))
-        std::cout << "13";
-    else if (square == std::bitset<25>(8192))
-        std::cout << "14";
-    else if (square == std::bitset<25>(16384))
-        std::cout << "15";
-    else if (square == std::bitset<25>(32768))
-        std::cout << "16";
-    else if (square == std::bitset<25>(65536))
-        std::cout << "17";
-    else if (square == std::bitset<25>(131072))
-        std::cout << "18";
-    else if (square == std::bitset<25>(262144))
-        std::cout << "19";
-    else if (square == std::bitset<25>(524288))
-        std::cout << "20";
-    else if (square == std::bitset<25>(1048576))
-        std::cout << "21";
-    else if (square == std::bitset<25>(2097152))
-        std::cout << "22";
-    else if (square == std::bitset<25>(4194304))
-        std::cout << "23";
-    else if (square == std::bitset<25>(8388608))
-        std::cout << "24";
-    else if (square == std::bitset<25>(16777216))
-        std::cout << "25";
-    else
-        std::cout << "  ";
-}
-
-template <int N>
-void nice_print_sudoku(Sudoku<N> sudoku)
-{
-    for (int y = 0; y != N * N; y++)
-    {
-        std::cout << "|";
-        for (int x = 0; x != N * N; x++)
-        {
-            nice_print_square<N * N>(sudoku[y * N * N + x]);
-            std::cout << "|";
-        }
-        std::cout << std::endl;
-    }
-    int end_size = 2;
-    if (N == 1 || N == 2 | N == 3)
-        end_size = N * N * 2 + 1;
-    if (N == 4 || N == 5)
-        end_size = N * N * 3 + 1;
-
-    for (int i = 0; i != end_size; i++)
-    {
-        std::cout << "-";
-    }
-    std::cout << std::endl;
-}
-
-template <int S>
-std::bitset<S> decimal_to_bitset(int decimal)
-{
-    int binairy = 1;
-    binairy <<= decimal - 1;
-    return std::bitset<S>(binairy);
-}
-
-int main()
-{
-
-    Sudoku<3> veronica = Sudoku<3>();
-    veronica[0 * 9 + 1] = decimal_to_bitset<3 * 3>(4);
-    veronica[0 * 9 + 8] = decimal_to_bitset<3 * 3>(9);
-    veronica[1 * 9 + 1] = decimal_to_bitset<3 * 3>(6);
-    veronica[1 * 9 + 2] = decimal_to_bitset<3 * 3>(2);
-    veronica[1 * 9 + 3] = decimal_to_bitset<3 * 3>(9);
-    veronica[1 * 9 + 8] = decimal_to_bitset<3 * 3>(8);
-    veronica[2 * 9 + 1] = decimal_to_bitset<3 * 3>(9);
-    veronica[2 * 9 + 2] = decimal_to_bitset<3 * 3>(7);
-    veronica[2 * 9 + 4] = decimal_to_bitset<3 * 3>(3);
-    veronica[2 * 9 + 6] = decimal_to_bitset<3 * 3>(6);
-    veronica[3 * 9 + 3] = decimal_to_bitset<3 * 3>(3);
-    veronica[4 * 9 + 6] = decimal_to_bitset<3 * 3>(3);
-    veronica[4 * 9 + 7] = decimal_to_bitset<3 * 3>(1);
-    veronica[4 * 9 + 8] = decimal_to_bitset<3 * 3>(6);
-    veronica[5 * 9 + 4] = decimal_to_bitset<3 * 3>(4);
-    veronica[5 * 9 + 5] = decimal_to_bitset<3 * 3>(8);
-    veronica[6 * 9 + 0] = decimal_to_bitset<3 * 3>(1);
-    veronica[6 * 9 + 3] = decimal_to_bitset<3 * 3>(5);
-    veronica[6 * 9 + 7] = decimal_to_bitset<3 * 3>(6);
-    veronica[7 * 9 + 3] = decimal_to_bitset<3 * 3>(6);
-    veronica[7 * 9 + 5] = decimal_to_bitset<3 * 3>(4);
-    veronica[7 * 9 + 7] = decimal_to_bitset<3 * 3>(9);
-    veronica[7 * 9 + 8] = decimal_to_bitset<3 * 3>(1);
-    veronica[8 * 9 + 3] = decimal_to_bitset<3 * 3>(1);
-    veronica[8 * 9 + 6] = decimal_to_bitset<3 * 3>(2);
-    veronica[8 * 9 + 8] = decimal_to_bitset<3 * 3>(7);
-
-    std::cout << "Trying to solve veronica Sudoku:" << std::endl;
-    nice_print_sudoku(veronica);
-
-    if (solve_sudoku(veronica, &veronica))
-    {
-        std::cout << "Veronica Sudoku solved!" << std::endl;
-        std::cout << "That was eazy =)" << std::endl;
-        nice_print_sudoku(veronica);
-        std::cout << "The awnser is:" << std::endl;
-        std::cout << "[";
-        nice_print_square<9>(veronica[3 * 9 + 7]);
-        std::cout << ", ";
-        nice_print_square<9>(veronica[7 * 9 + 2]);
-        std::cout << "]" << std::endl;
-    }
-    else
-    {
-        std::cout << "Veronica Sudoku is not solvable!" << std::endl;
-        std::cout << "What an amatures" << std::endl;
-    }
-
-    Sudoku<3> s = Sudoku<3>();
-    s[9 * 2 + 3] = std::bitset<9>(1);
-    std::cout << "Trying to solve:" << std::endl;
-    nice_print_sudoku(s);
-    if (solve_sudoku<3>(s, &s))
-    {
-        std::cout << "Sudoku is solved!" << std::endl;
-        nice_print_sudoku(s);
-    }
-    else
-    {
-        std::cout << "Sudoku cannot be solved =(" << std::endl;
-    }
-
-    Sudoku<4> s2 = Sudoku<4>();
-    s2[1] = std::bitset<4 * 4>(1);
-    std::cout << "Trying to solve:" << std::endl;
-    nice_print_sudoku(s2);
-    if (solve_sudoku<4>(s2, &s2))
-    {
-        std::cout << "Sudoku is solved!" << std::endl;
-        nice_print_sudoku(s2);
-    }
-    else
-    {
-        std::cout << "Sudoku cannot be solved =(" << std::endl;
-    }
-
-    Sudoku<5> s3 = Sudoku<5>();
-    s3[1] = std::bitset<5 * 5>(1);
-    std::cout << "Trying to solve:" << std::endl;
-    nice_print_sudoku(s3);
-    if (solve_sudoku<5>(s3, &s3))
-    {
-        std::cout << "Sudoku is solved!" << std::endl;
-        nice_print_sudoku(s3);
-    }
-    else
-    {
-        std::cout << "Sudoku cannot be solved =(" << std::endl;
-    }
-    std::cout << "Done" << std::endl;
-    return 0;
 }
